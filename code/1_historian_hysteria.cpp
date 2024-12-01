@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cmath>
 #include <tuple> 
+#include <unordered_map> 
 
 // Day 1: Historian Hysteria
 // Part one:
@@ -65,7 +66,7 @@ int absoluteDifference(int a, int b) {
     return std::abs(a - b);
 }
 
-int main() {
+int calculateDistance() {
 
     /*
     Pseduo code first
@@ -101,5 +102,49 @@ int main() {
     }
     std::cout << "Total difference " << total << std::endl;
     return 0; 
+}
+
+int calculateSimilarity() {
+    /*
+    
+    - Create hashmap from first list
+    - for i in range(0, len(list2)):
+        if i is in hashmap:
+            increase its value by 1
+        else:
+            continue
+    */
+    int similarity_score = 0;
+    std::vector<int> list1;
+    std::vector<int> list2;
+
+    std::tie(list1, list2) = readFileInput();
+
+    int similarity_total = 0;
+    for (int num : list1) {
+        int count = 0;
+        int similarity = 0;
+        for (int num2 : list2) {
+            if (num == num2) {
+                count++;
+
+            }
+            similarity = count * num;
+
+        }
+        similarity_total = similarity_total + similarity;
+
+
+    }
+
+    std::cout << "Similarity score " << similarity_total << std::endl;
+    return 0;
+
+}
+
+int main() {
+    calculateDistance();
+    calculateSimilarity(); 
+    return 0;
 }
 
