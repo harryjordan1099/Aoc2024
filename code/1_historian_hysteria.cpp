@@ -52,7 +52,7 @@ std::tuple<std::vector<int>, std::vector<int> > readFileInput() {
     }
     std::cout << std::endl;
 
-        std::cout << "First 5 values of List 2" << std::endl;
+    std::cout << "First 5 values of List 2" << std::endl;
     for (int i = 0; i < 5 && i < list2.size(); ++i) {
         std::cout << list2[i] << " ";
     }
