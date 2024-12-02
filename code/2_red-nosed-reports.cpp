@@ -58,6 +58,19 @@ int getSign(int num) {
     return 0;
 }
 
+bool isRowSafe(const std::vector<int>& row) {
+
+    int correct_sign = getSign(row[1] - row[0]);
+
+    for (size_t i = 0; i < row.size() - 1; ++i) {
+        int diff = row[i+1] - row[i];
+        if (std::abs(diff) < 1 || std::abs(diff) > 3 || getSign(diff) != correct_sign || getSign(diff) == 0) { 
+            return false;
+        }
+    }
+    return true;
+}
+
 int calculateSafeReports() {
     std::vector<std::vector<int> > input = readFileInput();
 
@@ -88,8 +101,47 @@ int calculateSafeReports() {
     return number_of_safe_report;
 }
 
+int calculateSafeReportsDampener() {
+    std::vector<std::vector<int> > input = readFileInput();
+    // std::vector<std::vector<int> > input = {
+    // {7, 6, 4, 2, 1},      
+    // {1, 2, 7, 8, 9},   
+    // {9, 7, 6, 2, 1},    
+    // {1, 3, 2, 4, 5},        
+    // {8, 6, 4, 4, 1},
+    // {1, 3, 6, 7, 9},           
+    // };
+
+    int number_of_safe_report = 0;
+    for (const std::vector<int>& row : input) {
+
+        if (isRowSafe(row)) {
+            number_of_safe_report++;
+            continue;
+        }
+
+    
+
+        bool is_safe_with_drop = false;
+        for (size_t i = 0; i < row.size(); ++i) {
+            std::vector<int> adjusted_row = row;
+            adjusted_row.erase(adjusted_row.begin() + i);
+
+            if (isRowSafe(adjusted_row)) {
+                is_safe_with_drop = true;
+                break;
+            }
+        }
+        if (is_safe_with_drop) {
+            number_of_safe_report++;
+        }
+    }
+    return number_of_safe_report;
+}
 int main() {
-    int result = calculateSafeReports();
-    std::cout << "Number of safe reports: " << result << std::endl;
+    int sf = calculateSafeReports();
+    int sf_dampening = calculateSafeReportsDampener();
+    std::cout << "Number of safe reports: " << sf << std::endl;
+    std::cout << "Number of safe reports w/ dampening: " << sf_dampening << std::endl;
     return 0;
 }
