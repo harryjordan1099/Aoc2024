@@ -62,7 +62,7 @@ int calculateSafeReports() {
     std::vector<std::vector<int> > input = readFileInput();
 
     int number_of_safe_report = 0;
-
+    std::cout << "Input size: " << input.size() << std::endl;
     for (size_t i = 0; i < input.size(); ++i) {
 
         const auto& row = input[i];
@@ -70,9 +70,10 @@ int calculateSafeReports() {
         bool is_safe = true;
 
         for (size_t j = 0; j < row.size() - 1; ++j) {
-            int diff = row[i+1] - row[i];
 
-            if ((diff > 3) || (diff < 1) || (getSign(diff) != correct_sign)) {
+            int diff = row[j+1] - row[j];
+
+            if (std::abs(diff) < 1 || std::abs(diff) > 3 || getSign(diff) != correct_sign || getSign(diff) == 0) {
                 is_safe = false;
                 break;
                 }
