@@ -8,69 +8,70 @@
 
 
 std::vector<std::pair<int, int>> readPageOrderingInput() {
-    std::vector<std::string> test_input = {
-        "47|53",
-        "97|13",
-        "97|61",
-        "97|47",
-        "75|29",
-        "61|13",
-        "75|53",
-        "29|13",
-        "97|29",
-        "53|29",
-        "61|53",
-        "97|53",
-        "61|29",
-        "47|13",
-        "75|47",
-        "97|75",
-        "47|61",
-        "75|61",
-        "47|29",
-        "75|13",
-        "53|13"
-    };
+    std::string filepath = "/Users/harryjordan/Coding/Aoc2024/data/input_aoc5_order.txt";
+    
+    std::ifstream inputFile(filepath);
+
+    if (!inputFile) {
+        std::cerr << "File not found! " << std::endl;
+        return {};
+    }
 
     std::vector<std::pair<int, int>> parsedInput;
-    for (const auto& row : test_input) {
-        std::stringstream ss(row);
-        int num1, num2;
-        char delimiter; // To capture the '|'
+    std::string line;
+    
+    // Read the file line by line
+    while (std::getline(inputFile, line)) {
+        std::stringstream ss(line);
+        std::string first_str, second_str;
 
-        // Parse numbers separated by '|'
-        if (ss >> num1 >> delimiter >> num2 && delimiter == '|') {
-            parsedInput.emplace_back(num1, num2);
+        // Split the line into two parts at the '|'
+        if (std::getline(ss, first_str, '|') && std::getline(ss, second_str)) {
+            // Convert the strings to integers
+            int first = std::stoi(first_str);
+            int second = std::stoi(second_str);
+            
+            // Add the pair to the vector
+            parsedInput.push_back(std::make_pair(first, second));
         }
     }
+
+    inputFile.close();
 
     return parsedInput;
 
 }
 
 std::vector<std::vector<int>> readPageUpdateInput() {
-    std::vector<std::string> test_input = {
-        "75,47,61,53,29",
-        "97,61,53,29,13",
-        "75,29,13",
-        "75,97,47,61,53",
-        "61,13,29",
-        "97,13,75,29,47"
-    };
+    std::string filepath = "/Users/harryjordan/Coding/Aoc2024/data/input_aoc5_update.txt";
+    
+    std::ifstream inputFile(filepath);
+
+    if (!inputFile) {
+        std::cerr << "File not found! " << std::endl;
+        return {};
+    }
 
     std::vector<std::vector<int>> parsed_data;
 
-    for (const auto& row : test_input) {
-        std::vector<int> numbers;
-        std::stringstream ss(row);
-        std::string token;
-
-        while (std::getline(ss, token, ',')) {
-            numbers.push_back(std::stoi(token));
+    std::string line;
+    
+    // Read the file line by line
+    while (std::getline(inputFile, line)) {
+        std::stringstream ss(line);
+        std::string number_str;
+        std::vector<int> row;
+        
+        // Split the line by commas and convert to integers
+        while (std::getline(ss, number_str, ',')) {
+            row.push_back(std::stoi(number_str)); // Convert string to integer and add to the row
         }
 
-        parsed_data.push_back(numbers);
+        // Add the row to the data vector
+        parsed_data.push_back(row);
     }
+
+    inputFile.close();
 
     return parsed_data;
 }
