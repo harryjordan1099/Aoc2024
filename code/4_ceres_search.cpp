@@ -39,6 +39,7 @@ int countOccurrences (const std::string& str, const std::string& word) {
         pos = str.find(word, pos + 1);
     }
 
+
     return count;
 }
 
@@ -69,8 +70,6 @@ int findWords(std::vector<std::string >& wordsearch) {
             column += wordsearch[row][col];
         }
     // Diagonals
-    
-
     totalOccurrences += countOccurrences(column, target1);
     totalOccurrences += countOccurrences(column, target2);
     }
@@ -96,9 +95,64 @@ int findWords(std::vector<std::string >& wordsearch) {
     return totalOccurrences;
 }
 
+bool findXmasInSubArray(std::vector<std::string >& subsarray) {
+
+    std::string target1 = "MAS";
+    std::string target2 = "SAM";
+    int numRows = subsarray.size();
+
+    std::string mainDiagonal, secondaryDiagonal;
+
+    for (size_t i =0; i < numRows; ++i) {
+        mainDiagonal += subsarray[i][i];
+        secondaryDiagonal += subsarray[i][numRows - i - 1];
+    }
+    
+    return (mainDiagonal.find(target1) != std::string::npos || mainDiagonal.find(target2) != std::string::npos) &&
+           (secondaryDiagonal.find(target1) != std::string::npos || secondaryDiagonal.find(target2) != std::string::npos);
+}
+
+
+
+int findXmas (std::vector<std::string >& wordsearch) {
+
+    int totalX = 0;
+
+    for (size_t i = 0; i < wordsearch.size() - 2; ++i) {
+        for (size_t j = 0; j < wordsearch.size() - 2; ++j) {
+            std::vector<std::string > subarray; 
+                for (size_t k = 0; k < 3; ++k) {
+                    subarray.push_back(wordsearch[i + k].substr(j, 3));
+
+                    if (findXmasInSubArray(subarray)) {
+                        totalX += 1;
+                    }
+                }
+        }
+    }
+    return totalX;
+}
+
 int main() {
     std::vector<std::string > wordsearch = readFileInput();
+    //     std::vector<std::string> wordsearch = {
+    //     ".M.S......",
+    //     "..A..MSMS.",
+    //     ".M.S.MAA..",
+    //     "..A.ASMSM.",
+    //     ".M.S.M....",
+    //     "..........",
+    //     "S.S.S.S.S.",
+    //     ".A.A.A.A..",
+    //     "M.M.M.M.M.",
+    //     ".........."
+    // };
+
     int totalOccurrences = findWords(wordsearch);
-    std::cout << totalOccurrences <<std::endl;
+    std::cout << "Word search X-MAS: " << totalOccurrences <<std::endl;
+
+    int totalX = findXmas(wordsearch);
+    std::cout << "Total X-MAS: " << totalX <<std::endl;
+
     return 0;
 }
