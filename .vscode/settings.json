@@ -65,6 +65,12 @@
         "chrono": "cpp",
         "compare": "cpp",
         "concepts": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "regex": "cpp",
+        "numeric": "cpp",
+        "filesystem": "cpp",
+        "utility": "cpp",
+        "__tree": "cpp",
+        "set": "cpp"
     }
 }
