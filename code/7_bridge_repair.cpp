@@ -6,12 +6,13 @@
 #include <set>
 #include <unordered_map>
 
+// Did you know longs were a thing? I thought I knew until I didnt!
+// Also first segmentation fault! yipee
 
-
-std::unordered_map<long, std::vector<int>> readData() 
+std::unordered_map<long, std::vector<long>> readData() 
 {
     std::ifstream infile("/Users/harryjordan/Coding/Aoc2024/data/day7/aoc_input_7.txt");
-    std::unordered_map<long, std::vector<int>> equations;
+    std::unordered_map<long, std::vector<long>> equations;
 
 
     for (std::string line; std::getline(infile, line);) 
@@ -24,8 +25,8 @@ std::unordered_map<long, std::vector<int>> readData()
         iss >> key >> colon;
 
         // getting values
-        std::vector<int> values;
-        int value;
+        std::vector<long> values;
+        long value;
         while (iss >> value) 
         {
             values.push_back(value);
@@ -49,11 +50,22 @@ std::unordered_map<long, std::vector<int>> readData()
     return equations;
 }
 
-bool findOperations(std::vector<int>& numbers, const long& target) 
+long concatanateOperator(long a, long b)
+{
+    std::stringstream ss;
+    ss << a << b;
+
+    long result;
+    ss >> result;
+    return result;
+
+}
+
+bool findOperations(std::vector<long>& numbers, const long& target) 
 // This function should determine whether an equation can be solved
 {
 
-    std::vector< std::unordered_map< int, std::string > > dp(numbers.size());
+    std::vector< std::unordered_map< long, std::string > > dp(numbers.size());
     dp[0][numbers[0]] = std::to_string(numbers[0]);
 
     for (int i = 1; i < numbers.size(); ++i)
@@ -61,11 +73,14 @@ bool findOperations(std::vector<int>& numbers, const long& target)
         int current_num = numbers[i];
         for (const auto& [value, expr] : dp[i - 1]) 
         {
-            int new_value_add = value + current_num;
+            long new_value_add = value + current_num;
             dp[i][new_value_add] = "(" + expr + " + " + std::to_string(current_num) + ")";
 
-            int new_value_mul = value * current_num;
+            long new_value_mul = value * current_num;
             dp[i][new_value_mul] = "(" + expr + " * " + std::to_string(current_num) + ")";
+
+            long new_value_concat = concatanateOperator(value, current_num);
+            dp[i][new_value_concat] = "(" + expr + " || " + std::to_string(current_num) + ")";
 
         }
 
@@ -80,7 +95,7 @@ bool findOperations(std::vector<int>& numbers, const long& target)
     }
 }
 
-long findTotalCalibration(std::unordered_map<long int,std::vector<int>> equations) 
+long findTotalCalibration(std::unordered_map<long ,std::vector<long>> equations) 
 
 {
     long total = 0;
@@ -101,7 +116,7 @@ long findTotalCalibration(std::unordered_map<long int,std::vector<int>> equation
 
 int main() 
 {
-    std::unordered_map<long ,std::vector<int>> equations = readData();
+    std::unordered_map<long ,std::vector<long>> equations = readData();
     long result = findTotalCalibration(equations);
 
     std::cout << result << std::endl;

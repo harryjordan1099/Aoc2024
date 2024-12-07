@@ -50,11 +50,6 @@ coord findGuardPosition(std::vector<std::string>& grid)
 }
 
 
-int simulateGuard(std::vector<std::string>& grid) 
-{
-
-}
-
 int main() 
 {
     std::vector<std::string> grid = readData();
