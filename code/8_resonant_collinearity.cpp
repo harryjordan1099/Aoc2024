@@ -69,14 +69,14 @@ int findTotalAntinodes (std::vector<std::string>& grid)
                 std::pair<int, int> N2 = std::make_pair(b.first + dy, b.second + dx);
 
                 // Check if they are both in grid and not a duplicate of another anti node
-                if (N1.first >= 0 && N1.first < grid.size() && N1.second >= 0 && N1.second < grid[0].size() && antinodes.find(N1) == antinodes.end())
+                if (N1.first >= 0 && N1.first < grid.size() && N1.second >= 0 && N1.second < grid[0].size())
                 {
                     antinodes.insert(N1);
                     grid[N1.first][N1.second] = '#';
                 }
 
 
-                if (N2.first >= 0 && N2.first < grid.size() && N2.second >= 0 && N2.second < grid[0].size() && antinodes.find(N2) == antinodes.end())
+                if (N2.first >= 0 && N2.first < grid.size() && N2.second >= 0 && N2.second < grid[0].size())
                     {
                         antinodes.insert(N2);
                         grid[N2.first][N2.second] = '#';
