@@ -11,6 +11,7 @@ struct print_rule {
     int page1{ 0 };
     int page2{ 0 };
 };
+
 std::tuple<std::vector<print_rule>, std::vector<std::vector<int>>> read_file()
 {
     std::ifstream infile("/Users/harryjordan/Coding/Aoc2024/data/aoc_input_5.txt");
@@ -88,7 +89,7 @@ int main()
     int valid_sum{ 0 };
     int repair_sum{ 0 };
     for (auto &update : update_list) {
-        //bool is_valid = is_update_valid(update, rule_list);
+
         bool is_valid = is_update_valid(update, rule_list);
 
         if (is_valid) {
@@ -96,7 +97,7 @@ int main()
 
             valid_sum += update.at(middle_index);
         } else {
-            //repair_update(update, rule_list);
+
             repair_update(update, rule_list);
 
             size_t middle_index = update.size() / 2;

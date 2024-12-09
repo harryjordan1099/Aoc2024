@@ -13,6 +13,7 @@ std::vector<std::string> readData()
     for (std::string line; std::getline(infile, line);) {
         grid.push_back(line);
     }
+    
 
     return grid;
 }
