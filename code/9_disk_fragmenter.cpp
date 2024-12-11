@@ -8,12 +8,12 @@
 #include <numeric>
 
 
-std::vector<int> readData() 
+std::vector<long> readData() 
 {   
-    std::string file_path = "/Users/harryjordan/Coding/Aoc2024/data/day9/aoc_input_9_test.txt";
+    std::string file_path = "/Users/harryjordan/Coding/Aoc2024/data/day9/aoc_input_9.txt";
 
     std::ifstream inputFile(file_path);
-    std::vector<int> result;
+    std::vector<long> result;
 
     if (!inputFile.is_open()) {
         throw std::runtime_error("Unable to open file: " + file_path);
@@ -39,10 +39,10 @@ std::vector<int> readData()
     return result;
 }
 
-std::vector<int> expandList(std::vector<int>& inputList)
+std::vector<long> expandList(std::vector<long>& inputList)
 {
-    std::vector<int> expandedList;
-    int index = 0;
+    std::vector<long> expandedList;
+    long index = 0;
     for (int i = 0; i < inputList.size(); ++i)
     {
         if (i % 2 == 0)
@@ -53,7 +53,7 @@ std::vector<int> expandList(std::vector<int>& inputList)
             }
             index += 1;
         }
-        else if (i % 2 == 1)
+        else
         {
             for (int j = 0; j < inputList[i]; ++j)
             {
@@ -66,65 +66,71 @@ std::vector<int> expandList(std::vector<int>& inputList)
     return expandedList;
 }
 
-std::vector<int> compressList(std::vector<int>& inputList)
-{   
-    std::vector<int> emptyIndices;
-    std::vector<int> realValues;
+std::vector<long> compressList(const std::vector<long>& inputList)
+{
+    std::vector<long> compressed = inputList;
 
-    for (int i = 0; i < inputList.size(); ++i)
+    // Create two lists for empty and filled indices
+    std::vector<long> empties, filled;
+    for (size_t i = 0; i < inputList.size(); ++i)
     {
-        if (inputList[i] == -1)
+        if (inputList[i] < 0) 
         {
-            emptyIndices.push_back(i);
+            empties.push_back(i);
         }
         else
         {
-            realValues.push_back(inputList[i]);
+            filled.push_back(i);
         }
     }
-    std::cout<< realValues.back() << std::endl;
 
-    for (int j = 0; j < inputList.size(); ++j)
+    // Fill the empty slots with values from the filled list
+    size_t j = 0;
+    for (auto it = filled.rbegin(); it != filled.rend() && j < empties.size(); ++it)
     {
-
-         if (inputList[j] == -1)
-         {
-            inputList[j] = realValues.back();
-            realValues.pop_back();
-         } else {
-            continue;
-         }
+        if (*it < empties[j])
+        {
+            break; // Stop if the filled index is less than the current empty index
+        }
+        compressed[empties[j]] = inputList[*it];
+        compressed[*it] = -1;
+        ++j;
     }
 
-    return inputList;
+    return compressed;
 }
 
-int checkSum(std::vector<int>& inputList)
+long checkSum(std::vector<long>& inputList)
 {
-    int sum = 0;
+    long sum = 0;
     for (int i = 0; i < inputList.size(); ++i)
     {
-        sum += i * inputList[i];
+        if (inputList[i] >= 0)
+        {
+            sum += i * inputList[i];
+        }
     }
     return sum;
 }
 
 int main() 
 {   
-    std::vector<int> input_string = readData();
-    std::vector<int> expandedList = expandList(input_string);
-    for (int i : expandedList)
-    {
-        std::cout << i << " ";
-    }
-    std::cout << std::endl;
-    std::vector<int> compressedList = compressList(expandedList);
-    for (int i : compressedList)
-    {
-        std::cout << i << " ";
-    }
 
-    int checksum = checkSum(compressedList); 
+    std::vector<long> input_string = readData();
+    std::vector<long> expandedList = expandList(input_string);
+    std::cout << "Expanded list: " << std::endl;
+    // for (int i : expandedList)
+    // {
+    //     std::cout << i << " ";
+    // }
+    std::cout << "\n" << std::endl;
+    std::vector<long> compressedList = compressList(expandedList);
+    std::cout << "Compressed list: " << std::endl;
+    // for (int i : compressedList)
+    // {
+    //     std::cout << i << " ";
+    // }
+    long checksum = checkSum(compressedList); 
     std::cout << checksum << std::endl;
     return 0;
 }
