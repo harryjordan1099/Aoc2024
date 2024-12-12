@@ -1,4 +1,6 @@
 #include <string>
+#include <algorithm>
+#include <vector>
 #include <sstream>
 #include <iostream>
 #include <fstream>
@@ -15,7 +17,7 @@
 std::vector<std::vector<int > > readData()
 {       
     // Input 
-    std::string input_path = "/Users/harryjordan/Coding/Aoc2024/data/day10/aoc_input_10.txt";
+    std::string input_path = "../data/day10/aoc_input_10.txt";
     std::ifstream inputFile(input_path);
 
     if (!inputFile.is_open()) {
