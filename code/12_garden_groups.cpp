@@ -82,25 +82,26 @@ int findPerimeter(char c, std::vector<std::string>& garden)
     return perimeter;
 }
 
-void area_dfs(std::vector<std::string>& grid, std::vector<std::vector<bool> >& visited, int i, int j, int& area)
+void area_dfs(std::vector<std::string>& grid, std::vector<std::vector<bool> >& visited, int i, int j, int& area, char c)
 {
     int rows = grid.size();
     int cols = grid[0].size();
 
     // check if out of bounds
-    if (i < 0 || i >= rows || j < 0 || j >= cols || visited[i][j] || grid[i][j])
+    if (i < 0 || i >= rows || j < 0 || j >= cols || visited[i][j] || grid[i][j] != c)
     {
         return;
     }
 
-    // Finding area
+    visited[i][j] = true;
+
     area++;
 
     // Explore neighbors (4-connected)
-    area_dfs(grid, visited, i - 1, j, area); // Up
-    area_dfs(grid, visited, i + 1, j, area); // Down
-    area_dfs(grid, visited, i, j - 1, area); // Left
-    area_dfs(grid, visited, i, j + 1, area); // Right
+    area_dfs(grid, visited, i - 1, j, area, c); // Up
+    area_dfs(grid, visited, i + 1, j, area, c); // Down
+    area_dfs(grid, visited, i, j - 1, area, c); // Left
+    area_dfs(grid, visited, i, j + 1, area, c); // Right
 
 
 }
@@ -121,7 +122,8 @@ std::vector<int> findAreas(char c, std::vector<std::string>& grid)
             if (grid[i][j] == c && !visited[i][j])
             {
                 int area = 0;
-                area_dfs(grid, visited, i, j, area);
+                area_dfs(grid, visited, i, j, area, c);
+                std::cout << area << std::endl;
                 areas.push_back(area);
             }
         }
@@ -147,19 +149,14 @@ long findCost(std::set<char>& unique_characters, std::vector<std::string>& garde
 
    for (auto c: unique_characters)
    {
-    int perimeter = findPerimeter(c, garden);
-    std::vector<int> areas = findAreas(c, garden);
+        int perimeter = findPerimeter(c, garden);
+        std::cout << "Perimeter" << perimeter << std::endl;
+        std::vector<int> areas = findAreas(c, garden);
 
-    for (auto& area : areas)
-    {
-        std::cout << area << std::endl;
-    }
-
-
-    int total_cost = std::accumulate(areas.begin(), areas.end(), 0, [&](int acc, int x) 
+        for (int area : areas) 
         {
-        return acc + x * perimeter;
-        });
+            total_cost += area * perimeter;
+        }
    }
 
    return total_cost;
@@ -171,8 +168,8 @@ int main()
 
     std::set<char> unique_characters = findAllUniqueCharacters(garden);
     int output = findCost(unique_characters , garden);
-    std::cout << "Cost: " << output << std::endl;
 
+    std::cout << output << std::endl;
     return 0;
 
 }
